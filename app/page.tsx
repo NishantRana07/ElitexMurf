@@ -112,7 +112,7 @@ export default function HomePage() {
       <section className="container mx-auto px-6 py-20 text-center">
         <div className="max-w-4xl mx-auto">
           <Badge className="mb-6 bg-purple-100/10 text-purple-300 border-purple-500/30">
-            🏆 Murf AI Hackathon 2024 Winner
+            🚀 Murf AI Hackathon 2025 Submission
           </Badge>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
             The Future of
@@ -287,7 +287,7 @@ export default function HomePage() {
               </p>
               <div className="flex items-center gap-2 text-sm text-gray-400">
                 <Volume2 className="h-4 w-4" />
-                <span>Powered by Murf AI • Built for Hackathon 2024</span>
+                <span>Powered by Murf AI • Built for Hackathon 2025</span>
               </div>
             </div>
             <div>
@@ -320,7 +320,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-white/10 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Elite AI. Built with ❤️ for Murf AI Hackathon.</p>
+            <p>&copy; 2025 Elite AI. Built with ❤️ for Murf AI Hackathon.</p>
           </div>
         </div>
       </footer>

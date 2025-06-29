@@ -12,6 +12,8 @@ import { ArrowLeft, Bot, Play, Save, Wand2, Volume2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
+import { useApp } from "@/lib/context"
+import { useToast } from "@/hooks/use-toast"
 
 const voiceOptions = [
   { id: "en-US-terrell", name: "Terrell", style: "Conversational", accent: "American", gender: "Male" },
@@ -61,6 +63,10 @@ const promptTemplates = [
 
 export default function CreateAgent() {
   const router = useRouter()
+  const { createAgent } = useApp()
+  const { toast } = useToast()
+  const [isCreating, setIsCreating] = useState(false)
+  
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -89,18 +95,101 @@ export default function CreateAgent() {
   }
 
   const handleVoicePreview = async () => {
-    if (!formData.voiceId) return
+    if (!formData.voiceId || !formData.firstMessage) {
+      toast({
+        title: "Missing Information",
+        description: "Please select a voice and add a first message to preview.",
+        variant: "destructive",
+      })
+      return
+    }
 
     setIsPreviewingVoice(true)
-    // Simulate voice preview
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/text-to-speech', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: formData.firstMessage,
+          voiceId: formData.voiceId,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to generate voice preview')
+      }
+
+      const data = await response.json()
+      if (data.audioUrl) {
+        // Create audio element and play
+        const audio = new Audio(data.audioUrl)
+        audio.play()
+        
+        toast({
+          title: "Voice Preview",
+          description: "Playing voice preview...",
+        })
+      }
+    } catch (error) {
+      console.error("Voice preview error:", error)
+      toast({
+        title: "Voice Preview Error",
+        description: "Failed to generate voice preview. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
       setIsPreviewingVoice(false)
-    }, 2000)
+    }
   }
 
-  const handleSave = () => {
-    // Save logic here
-    router.push("/dashboard")
+  const handleSave = async () => {
+    if (!formData.name || !formData.description || !formData.prompt || !formData.firstMessage || !formData.voiceId) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsCreating(true)
+    try {
+      const success = await createAgent({
+        name: formData.name,
+        description: formData.description,
+        category: "Custom",
+        voiceId: formData.voiceId,
+        isActive: true,
+        conversations: 0,
+        lastUsed: "Never",
+        prompt: formData.prompt,
+        firstMessage: formData.firstMessage,
+      })
+
+      if (success) {
+        toast({
+          title: "Agent Created",
+          description: "Your new agent has been created successfully!",
+        })
+        router.push("/dashboard")
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to create agent. Please try again.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsCreating(false)
+    }
   }
 
   return (
@@ -128,16 +217,40 @@ export default function CreateAgent() {
               </div>
             </div>
             <div className="flex gap-3">
-              <Button variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent">
-                <Play className="w-4 h-4 mr-2" />
-                Test
+              <Button 
+                onClick={handleVoicePreview}
+                disabled={isPreviewingVoice || !formData.voiceId || !formData.firstMessage}
+                variant="outline" 
+                className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent"
+              >
+                {isPreviewingVoice ? (
+                  <>
+                    <div className="w-4 h-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    Testing...
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4 mr-2" />
+                    Test Voice
+                  </>
+                )}
               </Button>
               <Button
                 onClick={handleSave}
+                disabled={isCreating}
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
               >
-                <Save className="w-4 h-4 mr-2" />
-                Save Agent
+                {isCreating ? (
+                  <>
+                    <div className="w-4 h-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Agent
+                  </>
+                )}
               </Button>
             </div>
           </div>

@@ -3,7 +3,7 @@ import axios from "axios"
 
 export async function POST(request: NextRequest) {
   try {
-    const { text } = await request.json()
+    const { text, voiceId } = await request.json()
 
     if (!text) {
       return NextResponse.json({ error: "Text is required" }, { status: 400 })
@@ -11,14 +11,14 @@ export async function POST(request: NextRequest) {
 
     const data = {
       text: text,
-      voiceId: "en-US-terrell",
+      voiceId: voiceId || "en-US-terrell",
     }
 
     const response = await axios.post("https://api.murf.ai/v1/speech/generate", data, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        "api-key": process.env.MURF_API_KEY || "",
+        "api-key": process.env.MURF_API_KEY || "ap2_212a8c26-44b3-46ae-872a-735aa2c74974",
       },
     })
 
