@@ -1,0 +1,11 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "env": {
+    "GOOGLE_AI_API_KEY": "AIzaSyCEUw8hi5QajCQ6vaBwZ-93v48JoWDx8u8",
+    "MURF_API_KEY": "ap2_212a8c26-44b3-46ae-872a-735aa2c74974",
+    "NEXT_PUBLIC_APP_URL": "https://your-vercel-app.vercel.app"
+  }
+} 
