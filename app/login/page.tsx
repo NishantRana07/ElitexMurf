@@ -58,8 +58,8 @@ export default function LoginPage() {
             <Image src="/elite-ai-logo.png" alt="Elite AI" width={40} height={30} className="w-10 h-7 object-contain" />
             <h1 className="text-3xl font-bold text-white">Elite AI</h1>
           </div>
-          <Badge className="mb-4 bg-purple-100/10 text-purple-300 border-purple-500/30">
-            🏆 Murf AI Hackathon 2024
+          <Badge className="mb-6 bg-purple-100/10 text-purple-300 border-purple-500/30">
+            🚀 Murf AI Hackathon 2025 Submission
           </Badge>
           <p className="text-gray-300">Sign in to your AI agent studio</p>
         </div>
@@ -200,7 +200,7 @@ export default function LoginPage() {
           </CardContent>
         </Card>
 
-        <div className="text-center mt-6 text-xs text-gray-500">Built with ❤️ for Murf AI Hackathon 2024</div>
+        <div className="text-center mt-6 text-xs text-gray-500">Built with ❤️ for Murf AI Hackathon 2025</div>
       </div>
     </div>
   )

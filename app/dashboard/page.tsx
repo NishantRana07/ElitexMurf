@@ -17,96 +17,29 @@ import {
   Volume2,
   TrendingUp,
   Sparkles,
+  Loader2,
+  AlertCircle,
+  Filter,
+  RotateCcw,
+  Check,
+  Code,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-
-interface Agent {
-  id: string
-  name: string
-  description: string
-  category: string
-  voiceId: string
-  isActive: boolean
-  conversations: number
-  lastUsed: string
-  avatar?: string
-}
-
-// Default agents fallback
-const defaultAgents: Agent[] = [
-  {
-    id: "1",
-    name: "Stress-Buster Buddy",
-    description: "Your empathetic companion for stress relief and mental wellness support",
-    category: "Wellness",
-    voiceId: "en-US-terrell",
-    isActive: true,
-    conversations: 127,
-    lastUsed: "2 hours ago",
-  },
-  {
-    id: "2",
-    name: "Creative Artist",
-    description: "Your inspiring guide for artistic projects and creative inspiration",
-    category: "Creative",
-    voiceId: "en-US-natalie",
-    isActive: true,
-    conversations: 89,
-    lastUsed: "1 day ago",
-  },
-  {
-    id: "3",
-    name: "Fitness Coach",
-    description: "Your motivational trainer for achieving health and fitness goals",
-    category: "Health",
-    voiceId: "en-US-ken",
-    isActive: false,
-    conversations: 45,
-    lastUsed: "3 days ago",
-  },
-  {
-    id: "4",
-    name: "Study Buddy",
-    description: "Your patient learning companion for academic success",
-    category: "Education",
-    voiceId: "en-US-julia",
-    isActive: true,
-    conversations: 203,
-    lastUsed: "5 minutes ago",
-  },
-]
+import { useApp } from "@/lib/context"
+import { useToast } from "@/hooks/use-toast"
 
 export default function Dashboard() {
-  const [agents, setAgents] = useState<Agent[]>([])
+  const { agents, isLoading, error, deleteAgent, updateAgent, loadAgents } = useApp()
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
-  const [isLoading, setIsLoading] = useState(true)
+  const [isDeleting, setIsDeleting] = useState<string | null>(null)
+  const { toast } = useToast()
 
-  // Fetch agents from JSON blob with fallback
+  // Load agents on component mount
   useEffect(() => {
-    const fetchAgents = async () => {
-      try {
-        setIsLoading(true)
-        // Try to fetch from JSON blob URL
-        const response = await fetch("https://api.example.com/agents")
-        if (response.ok) {
-          const data = await response.json()
-          setAgents(data.agents || defaultAgents)
-        } else {
-          throw new Error("API not available")
-        }
-      } catch (error) {
-        console.log("Using default agents:", error)
-        // Fallback to default agents
-        setAgents(defaultAgents)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchAgents()
-  }, [])
+    loadAgents()
+  }, [loadAgents])
 
   const categories = ["All", ...Array.from(new Set(agents.map((agent) => agent.category)))]
 
@@ -123,6 +56,81 @@ export default function Dashboard() {
     activeAgents: agents.filter((a) => a.isActive).length,
     totalConversations: agents.reduce((sum, a) => sum + a.conversations, 0),
     avgResponseTime: "0.8s",
+  }
+
+  const handleDeleteAgent = async (agentId: string) => {
+    if (!confirm("Are you sure you want to delete this agent? This action cannot be undone.")) {
+      return
+    }
+
+    setIsDeleting(agentId)
+    try {
+      const success = await deleteAgent(agentId)
+      if (success) {
+        toast({
+          title: "Agent deleted",
+          description: "The agent has been successfully deleted.",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to delete the agent. Please try again.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsDeleting(null)
+    }
+  }
+
+  const handleToggleActive = async (agent: any) => {
+    try {
+      const success = await updateAgent(agent.id, { isActive: !agent.isActive })
+      if (success) {
+        toast({
+          title: "Agent updated",
+          description: `Agent ${agent.isActive ? 'deactivated' : 'activated'} successfully.`,
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update agent status.",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const handleCopyAgentId = (agentId: string) => {
+    navigator.clipboard.writeText(agentId)
+    toast({
+      title: "Copied!",
+      description: "Agent ID copied to clipboard.",
+    })
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <Card className="bg-black/40 border-red-500/20 backdrop-blur-xl max-w-md">
+          <CardContent className="p-6 text-center">
+            <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
+            <h3 className="text-white text-lg font-semibold mb-2">Error Loading Dashboard</h3>
+            <p className="text-gray-300 mb-4">{error}</p>
+            <Button onClick={() => loadAgents()} className="bg-gradient-to-r from-purple-600 to-pink-600">
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Retry
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -153,6 +161,18 @@ export default function Dashboard() {
               </Link>
             </div>
             <div className="flex gap-3">
+              <Button 
+                onClick={() => loadAgents()} 
+                disabled={isLoading}
+                variant="outline" 
+                className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent"
+              >
+                {isLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <RotateCcw className="w-4 h-4" />
+                )}
+              </Button>
               <Button variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent">
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
@@ -339,19 +359,49 @@ export default function Dashboard() {
                         Chat
                       </Button>
                     </Link>
+                    <Link href={`/embed/${agent.id}`}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent"
+                        title="Embed Agent"
+                      >
+                        <Code className="w-4 h-4" />
+                      </Button>
+                    </Link>
                     <Button
+                      onClick={() => handleCopyAgentId(agent.id)}
                       variant="outline"
                       size="sm"
                       className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent"
+                      title="Copy Agent ID"
                     >
                       <Copy className="w-4 h-4" />
                     </Button>
                     <Button
+                      onClick={() => handleToggleActive(agent)}
+                      variant="outline"
+                      size="sm"
+                      className={`border-white/20 hover:bg-white/10 bg-transparent ${
+                        agent.isActive ? 'text-green-300 hover:text-green-200' : 'text-gray-300 hover:text-gray-200'
+                      }`}
+                      title={agent.isActive ? 'Deactivate Agent' : 'Activate Agent'}
+                    >
+                      <div className={`w-2 h-2 rounded-full ${agent.isActive ? 'bg-green-400' : 'bg-gray-400'}`} />
+                    </Button>
+                    <Button
+                      onClick={() => handleDeleteAgent(agent.id)}
+                      disabled={isDeleting === agent.id}
                       variant="outline"
                       size="sm"
                       className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent hover:text-red-400"
+                      title="Delete Agent"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      {isDeleting === agent.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-4 h-4" />
+                      )}
                     </Button>
                   </div>
                 </CardContent>
@@ -377,13 +427,23 @@ export default function Dashboard() {
         {/* Quick Actions */}
         <div className="mt-12">
           <h2 className="text-2xl font-bold text-white mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Link href="/create">
               <Card className="bg-black/40 border-white/10 backdrop-blur-xl hover:bg-black/50 transition-all duration-300 hover:scale-105 cursor-pointer">
                 <CardContent className="p-6 text-center">
                   <Plus className="h-12 w-12 text-purple-400 mx-auto mb-4" />
                   <h3 className="text-white font-semibold mb-2">Create New Agent</h3>
                   <p className="text-gray-400 text-sm">Build a custom AI agent with advanced voice capabilities</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/standalone-chatbot.html" target="_blank">
+              <Card className="bg-black/40 border-white/10 backdrop-blur-xl hover:bg-black/50 transition-all duration-300 hover:scale-105 cursor-pointer">
+                <CardContent className="p-6 text-center">
+                  <Code className="h-12 w-12 text-orange-400 mx-auto mb-4" />
+                  <h3 className="text-white font-semibold mb-2">Standalone Widget</h3>
+                  <p className="text-gray-400 text-sm">Copy-paste ready chatbot for any website</p>
                 </CardContent>
               </Card>
             </Link>
