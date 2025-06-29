@@ -3,38 +3,39 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Bot, Mic, Sparkles, Star, Play, MessageCircle, Volume2, Brain, Shield, Globe } from "lucide-react"
+import { ArrowRight, Bot, Mic, Sparkles, Star, Play, MessageCircle, Volume2, Brain, Shield, Globe, Menu, X } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { useState } from "react"
 
 const features = [
   {
-    icon: <Mic className="h-6 w-6" />,
+    icon: <Mic className="h-5 w-5 sm:h-6 sm:w-6" />,
     title: "Advanced Voice AI",
     description: "Powered by Murf's industry-leading voice synthesis technology for natural conversations",
   },
   {
-    icon: <Brain className="h-6 w-6" />,
+    icon: <Brain className="h-5 w-5 sm:h-6 sm:w-6" />,
     title: "Smart Conversations",
     description: "Google Gemini integration for intelligent, context-aware responses",
   },
   {
-    icon: <Bot className="h-6 w-6" />,
+    icon: <Bot className="h-5 w-5 sm:h-6 sm:w-6" />,
     title: "Custom Agents",
     description: "Create specialized AI agents tailored to your specific needs and use cases",
   },
   {
-    icon: <Sparkles className="h-6 w-6" />,
+    icon: <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />,
     title: "Auto Mode",
     description: "Seamless voice-to-voice conversations with automatic speech recognition",
   },
   {
-    icon: <Shield className="h-6 w-6" />,
+    icon: <Shield className="h-5 w-5 sm:h-6 sm:w-6" />,
     title: "Enterprise Ready",
     description: "Secure, scalable, and reliable for business-critical applications",
   },
   {
-    icon: <Globe className="h-6 w-6" />,
+    icon: <Globe className="h-5 w-5 sm:h-6 sm:w-6" />,
     title: "Multi-Language",
     description: "Support for multiple languages and accents with premium voice quality",
   },
@@ -65,23 +66,27 @@ const testimonials = [
 ]
 
 export default function HomePage() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Navigation */}
-      <nav className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
-        <div className="container mx-auto px-6 py-4">
+      <nav className="border-b border-white/10 bg-black/20 backdrop-blur-xl sticky top-0 z-50">
+        <div className="mobile-container mx-auto py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Image
                 src="/elite-ai-logo.png"
                 alt="Elite AI"
                 width={40}
                 height={30}
-                className="w-10 h-7 object-contain"
+                className="w-8 h-6 sm:w-10 sm:h-7 object-contain"
               />
-              <span className="text-2xl font-bold text-white">Elite AI</span>
+              <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">Elite AI</span>
             </div>
-            <div className="hidden md:flex items-center gap-8">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-6 lg:gap-8">
               <Link href="#features" className="text-gray-300 hover:text-white transition-colors">
                 Features
               </Link>
@@ -92,56 +97,111 @@ export default function HomePage() {
                 Dashboard
               </Link>
             </div>
-            <div className="flex gap-3">
+            
+            {/* Desktop Buttons */}
+            <div className="hidden md:flex gap-3">
               <Link href="/login">
-                <Button variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent">
+                <Button variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent touch-button">
                   Sign In
                 </Button>
               </Link>
               <Link href="/dashboard">
-                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0">
+                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 touch-button">
                   Get Started
                 </Button>
               </Link>
             </div>
+            
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-white hover:bg-white/10 touch-button"
+              >
+                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
+            </div>
           </div>
+          
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden mt-4 pb-4 border-t border-white/10 pt-4">
+              <div className="flex flex-col gap-4">
+                <Link 
+                  href="#features" 
+                  className="text-gray-300 hover:text-white transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Features
+                </Link>
+                <Link 
+                  href="#testimonials" 
+                  className="text-gray-300 hover:text-white transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Testimonials
+                </Link>
+                <Link 
+                  href="/dashboard" 
+                  className="text-gray-300 hover:text-white transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Dashboard
+                </Link>
+                <div className="flex flex-col gap-3 pt-2">
+                  <Link href="/login">
+                    <Button variant="outline" className="w-full border-white/20 text-gray-300 hover:bg-white/10 bg-transparent touch-button">
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link href="/dashboard">
+                    <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 touch-button">
+                      Get Started
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-6 py-20 text-center">
+      <section className="mobile-container mx-auto py-12 sm:py-16 md:py-20 text-center">
         <div className="max-w-4xl mx-auto">
-          <Badge className="mb-6 bg-purple-100/10 text-purple-300 border-purple-500/30">
+          <Badge className="mb-4 sm:mb-6 bg-purple-100/10 text-purple-300 border-purple-500/30 text-xs sm:text-sm">
             🚀 Murf AI Hackathon 2025 Submission
           </Badge>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="mobile-heading font-bold text-white mb-4 sm:mb-6 leading-tight">
             The Future of
             <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               {" "}
               AI Conversations
             </span>
           </h1>
-          <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+          <p className="mobile-text text-gray-300 mb-6 sm:mb-8 leading-relaxed max-w-3xl mx-auto">
             Create intelligent AI agents with human-like voices. Powered by Murf's advanced voice technology and Google
             Gemini's conversational AI for seamless, natural interactions.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/dashboard">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+            <Link href="/dashboard" className="w-full sm:w-auto">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 px-8 py-6 text-lg"
+                className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg touch-button"
               >
                 Start Building
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </Link>
-            <Link href="/chat/1">
+            <Link href="/chat/1" className="w-full sm:w-auto">
               <Button
                 size="lg"
                 variant="outline"
-                className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent px-8 py-6 text-lg"
+                className="w-full sm:w-auto border-white/20 text-gray-300 hover:bg-white/10 bg-transparent px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg touch-button"
               >
-                <Play className="mr-2 h-5 w-5" />
+                <Play className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                 Try Demo
               </Button>
             </Link>
@@ -150,27 +210,27 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="container mx-auto px-6 py-20">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">Powerful Features</h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+      <section id="features" className="mobile-container mx-auto py-12 sm:py-16 md:py-20">
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className="mobile-heading font-bold text-white mb-3 sm:mb-4">Powerful Features</h2>
+          <p className="mobile-text text-gray-300 max-w-2xl mx-auto">
             Everything you need to create, deploy, and manage intelligent AI agents with premium voice capabilities
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {features.map((feature, index) => (
             <Card
               key={index}
               className="bg-black/40 border-white/10 backdrop-blur-xl hover:bg-black/50 transition-all duration-300 hover:scale-105"
             >
-              <CardHeader>
-                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white mb-4">
+              <CardHeader className="pb-3 sm:pb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white mb-3 sm:mb-4">
                   {feature.icon}
                 </div>
-                <CardTitle className="text-white text-xl">{feature.title}</CardTitle>
+                <CardTitle className="text-white text-lg sm:text-xl">{feature.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-gray-300 text-base leading-relaxed">
+                <CardDescription className="text-gray-300 mobile-text leading-relaxed">
                   {feature.description}
                 </CardDescription>
               </CardContent>
@@ -180,51 +240,51 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="container mx-auto px-6 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-          <div className="bg-black/40 border border-white/10 backdrop-blur-xl rounded-lg p-8">
-            <div className="text-4xl font-bold text-white mb-2">99.9%</div>
-            <div className="text-gray-300">Voice Quality</div>
+      <section className="mobile-container mx-auto py-12 sm:py-16 md:py-20">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 text-center">
+          <div className="bg-black/40 border border-white/10 backdrop-blur-xl rounded-lg p-4 sm:p-6 lg:p-8">
+            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">99.9%</div>
+            <div className="text-gray-300 text-xs sm:text-sm lg:text-base">Voice Quality</div>
           </div>
-          <div className="bg-black/40 border border-white/10 backdrop-blur-xl rounded-lg p-8">
-            <div className="text-4xl font-bold text-white mb-2">50ms</div>
-            <div className="text-gray-300">Response Time</div>
+          <div className="bg-black/40 border border-white/10 backdrop-blur-xl rounded-lg p-4 sm:p-6 lg:p-8">
+            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">50ms</div>
+            <div className="text-gray-300 text-xs sm:text-sm lg:text-base">Response Time</div>
           </div>
-          <div className="bg-black/40 border border-white/10 backdrop-blur-xl rounded-lg p-8">
-            <div className="text-4xl font-bold text-white mb-2">24/7</div>
-            <div className="text-gray-300">Availability</div>
+          <div className="bg-black/40 border border-white/10 backdrop-blur-xl rounded-lg p-4 sm:p-6 lg:p-8">
+            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">24/7</div>
+            <div className="text-gray-300 text-xs sm:text-sm lg:text-base">Availability</div>
           </div>
-          <div className="bg-black/40 border border-white/10 backdrop-blur-xl rounded-lg p-8">
-            <div className="text-4xl font-bold text-white mb-2">100+</div>
-            <div className="text-gray-300">Voice Options</div>
+          <div className="bg-black/40 border border-white/10 backdrop-blur-xl rounded-lg p-4 sm:p-6 lg:p-8">
+            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">100+</div>
+            <div className="text-gray-300 text-xs sm:text-sm lg:text-base">Voice Options</div>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="container mx-auto px-6 py-20">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">What Our Users Say</h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+      <section id="testimonials" className="mobile-container mx-auto py-12 sm:py-16 md:py-20">
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className="mobile-heading font-bold text-white mb-3 sm:mb-4">What Our Users Say</h2>
+          <p className="mobile-text text-gray-300 max-w-2xl mx-auto">
             Join thousands of developers and businesses building the future with Elite AI
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {testimonials.map((testimonial, index) => (
             <Card key={index} className="bg-black/40 border-white/10 backdrop-blur-xl">
-              <CardHeader>
-                <div className="flex items-center gap-1 mb-4">
+              <CardHeader className="pb-3 sm:pb-4">
+                <div className="flex items-center gap-1 mb-3 sm:mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <Star key={i} className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <CardDescription className="text-gray-300 text-base leading-relaxed">
+                <CardDescription className="text-gray-300 mobile-text leading-relaxed">
                   "{testimonial.content}"
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-white font-medium">{testimonial.name}</div>
-                <div className="text-gray-400 text-sm">
+                <div className="text-white font-medium mobile-text">{testimonial.name}</div>
+                <div className="text-gray-400 text-xs sm:text-sm">
                   {testimonial.role} at {testimonial.company}
                 </div>
               </CardContent>
@@ -234,31 +294,31 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="container mx-auto px-6 py-20">
+      <section className="mobile-container mx-auto py-12 sm:py-16 md:py-20">
         <Card className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border-purple-500/30 backdrop-blur-xl">
-          <CardContent className="text-center py-16">
-            <h2 className="text-4xl font-bold text-white mb-4">Ready to Get Started?</h2>
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          <CardContent className="text-center py-12 sm:py-16">
+            <h2 className="mobile-heading font-bold text-white mb-3 sm:mb-4">Ready to Get Started?</h2>
+            <p className="mobile-text text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">
               Join the AI revolution and create your first intelligent agent in minutes. Experience the power of Murf's
               voice technology today.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/dashboard">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <Link href="/dashboard" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 px-8 py-6 text-lg"
+                  className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg touch-button"
                 >
-                  <Bot className="mr-2 h-5 w-5" />
+                  <Bot className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Create Your Agent
                 </Button>
               </Link>
-              <Link href="/chat/1">
+              <Link href="/chat/1" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent px-8 py-6 text-lg"
+                  className="w-full sm:w-auto border-white/20 text-gray-300 hover:bg-white/10 bg-transparent px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg touch-button"
                 >
-                  <MessageCircle className="mr-2 h-5 w-5" />
+                  <MessageCircle className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Try Live Demo
                 </Button>
               </Link>
@@ -269,57 +329,57 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t border-white/10 bg-black/20 backdrop-blur-xl">
-        <div className="container mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="mobile-container mx-auto py-8 sm:py-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
                 <Image
                   src="/elite-ai-logo.png"
                   alt="Elite AI"
                   width={32}
                   height={24}
-                  className="w-8 h-6 object-contain"
+                  className="w-6 h-5 sm:w-8 sm:h-6 object-contain"
                 />
-                <span className="text-xl font-bold text-white">Elite AI</span>
+                <span className="text-lg sm:text-xl font-bold text-white">Elite AI</span>
               </div>
-              <p className="text-gray-300 mb-4 max-w-md">
+              <p className="text-gray-300 mb-3 sm:mb-4 max-w-md mobile-text">
                 The most advanced AI agent platform powered by Murf's voice technology and Google Gemini's intelligence.
               </p>
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <Volume2 className="h-4 w-4" />
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-400">
+                <Volume2 className="h-3 w-3 sm:h-4 sm:w-4" />
                 <span>Powered by Murf AI • Built for Hackathon 2025</span>
               </div>
             </div>
             <div>
-              <h3 className="text-white font-semibold mb-4">Product</h3>
+              <h3 className="text-white font-semibold mb-3 sm:mb-4 mobile-text">Product</h3>
               <div className="space-y-2">
-                <Link href="/dashboard" className="block text-gray-300 hover:text-white transition-colors">
+                <Link href="/dashboard" className="block text-gray-300 hover:text-white transition-colors mobile-text">
                   Dashboard
                 </Link>
-                <Link href="/create" className="block text-gray-300 hover:text-white transition-colors">
+                <Link href="/create" className="block text-gray-300 hover:text-white transition-colors mobile-text">
                   Create Agent
                 </Link>
-                <Link href="/chat/1" className="block text-gray-300 hover:text-white transition-colors">
+                <Link href="/chat/1" className="block text-gray-300 hover:text-white transition-colors mobile-text">
                   Try Demo
                 </Link>
               </div>
             </div>
             <div>
-              <h3 className="text-white font-semibold mb-4">Company</h3>
+              <h3 className="text-white font-semibold mb-3 sm:mb-4 mobile-text">Company</h3>
               <div className="space-y-2">
-                <Link href="#" className="block text-gray-300 hover:text-white transition-colors">
+                <Link href="#" className="block text-gray-300 hover:text-white transition-colors mobile-text">
                   About
                 </Link>
-                <Link href="#" className="block text-gray-300 hover:text-white transition-colors">
+                <Link href="#" className="block text-gray-300 hover:text-white transition-colors mobile-text">
                   Contact
                 </Link>
-                <Link href="#" className="block text-gray-300 hover:text-white transition-colors">
+                <Link href="#" className="block text-gray-300 hover:text-white transition-colors mobile-text">
                   Support
                 </Link>
               </div>
             </div>
           </div>
-          <div className="border-t border-white/10 mt-8 pt-8 text-center text-gray-400">
+          <div className="border-t border-white/10 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-gray-400 mobile-text">
             <p>&copy; 2025 Elite AI. Built with ❤️ for Murf AI Hackathon.</p>
           </div>
         </div>

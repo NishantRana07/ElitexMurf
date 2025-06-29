@@ -196,32 +196,32 @@ export default function CreateAgent() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Header */}
       <header className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <div className="mobile-container mx-auto py-3 sm:py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <Link href="/dashboard">
-                <Button variant="ghost" className="text-gray-400 hover:text-white hover:bg-white/10">
+                <Button variant="ghost" className="text-gray-400 hover:text-white hover:bg-white/10 touch-button">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back
                 </Button>
               </Link>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <Image
                   src="/elite-ai-logo.png"
                   alt="Elite AI"
                   width={32}
                   height={24}
-                  className="w-8 h-6 object-contain"
+                  className="w-6 h-5 sm:w-8 sm:h-6 object-contain"
                 />
-                <h1 className="text-2xl font-bold text-white">Create New Agent</h1>
+                <h1 className="mobile-heading font-bold text-white">Create New Agent</h1>
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <Button 
                 onClick={handleVoicePreview}
                 disabled={isPreviewingVoice || !formData.voiceId || !formData.firstMessage}
                 variant="outline" 
-                className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent"
+                className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent touch-button"
               >
                 {isPreviewingVoice ? (
                   <>
@@ -238,7 +238,7 @@ export default function CreateAgent() {
               <Button
                 onClick={handleSave}
                 disabled={isCreating}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 touch-button"
               >
                 {isCreating ? (
                   <>
@@ -257,21 +257,21 @@ export default function CreateAgent() {
         </div>
       </header>
 
-      <div className="container mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="mobile-container mx-auto py-4 sm:py-6 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Main Form */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Basic Information */}
             <Card className="bg-black/40 border-white/10 backdrop-blur-xl">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Bot className="w-5 h-5" />
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="text-white flex items-center gap-2 mobile-text">
+                  <Bot className="w-4 h-4 sm:w-5 sm:h-5" />
                   Basic Information
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 sm:space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-gray-300">
+                  <Label htmlFor="name" className="text-gray-300 mobile-text">
                     Agent Name
                   </Label>
                   <Input
@@ -279,11 +279,11 @@ export default function CreateAgent() {
                     value={formData.name}
                     onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                     placeholder="e.g., Stress-Buster Buddy"
-                    className="bg-black/20 border-white/20 text-white placeholder:text-gray-500"
+                    className="bg-black/20 border-white/20 text-white placeholder:text-gray-500 touch-button mobile-text"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description" className="text-gray-300">
+                  <Label htmlFor="description" className="text-gray-300 mobile-text">
                     Description
                   </Label>
                   <Textarea
@@ -291,7 +291,7 @@ export default function CreateAgent() {
                     value={formData.description}
                     onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
                     placeholder="Brief description of what your agent does..."
-                    className="bg-black/20 border-white/20 text-white placeholder:text-gray-500 min-h-[80px]"
+                    className="bg-black/20 border-white/20 text-white placeholder:text-gray-500 min-h-[80px] mobile-text touch-button"
                   />
                 </div>
               </CardContent>
@@ -299,29 +299,29 @@ export default function CreateAgent() {
 
             {/* Personality & Behavior */}
             <Card className="bg-black/40 border-white/10 backdrop-blur-xl">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Wand2 className="w-5 h-5" />
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="text-white flex items-center gap-2 mobile-text">
+                  <Wand2 className="w-4 h-4 sm:w-5 sm:h-5" />
                   Personality & Behavior
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 sm:space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-gray-300">Quick Templates</Label>
+                  <Label className="text-gray-300 mobile-text">Quick Templates</Label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {promptTemplates.map((template, index) => (
                       <Button
                         key={index}
                         variant="outline"
                         onClick={() => handleTemplateSelect(index)}
-                        className={`text-left h-auto p-3 ${
+                        className={`text-left h-auto p-2 sm:p-3 touch-button ${
                           selectedTemplate === index
                             ? "border-purple-500 bg-purple-500/10 text-purple-300"
                             : "border-white/20 text-gray-300 hover:bg-white/10"
                         }`}
                       >
                         <div>
-                          <div className="font-medium">{template.name}</div>
+                          <div className="font-medium mobile-text">{template.name}</div>
                           <div className="text-xs opacity-70 mt-1">{template.firstMessage.substring(0, 50)}...</div>
                         </div>
                       </Button>
@@ -330,7 +330,7 @@ export default function CreateAgent() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="prompt" className="text-gray-300">
+                  <Label htmlFor="prompt" className="text-gray-300 mobile-text">
                     System Prompt
                   </Label>
                   <Textarea
@@ -338,12 +338,12 @@ export default function CreateAgent() {
                     value={formData.prompt}
                     onChange={(e) => setFormData((prev) => ({ ...prev, prompt: e.target.value }))}
                     placeholder="Define your agent's personality, role, and behavior..."
-                    className="bg-black/20 border-white/20 text-white placeholder:text-gray-500 min-h-[120px]"
+                    className="bg-black/20 border-white/20 text-white placeholder:text-gray-500 min-h-[120px] mobile-text touch-button"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="firstMessage" className="text-gray-300">
+                  <Label htmlFor="firstMessage" className="text-gray-300 mobile-text">
                     First Message
                   </Label>
                   <Textarea
@@ -351,7 +351,7 @@ export default function CreateAgent() {
                     value={formData.firstMessage}
                     onChange={(e) => setFormData((prev) => ({ ...prev, firstMessage: e.target.value }))}
                     placeholder="The greeting message users will see first..."
-                    className="bg-black/20 border-white/20 text-white placeholder:text-gray-500 min-h-[80px]"
+                    className="bg-black/20 border-white/20 text-white placeholder:text-gray-500 min-h-[80px] mobile-text touch-button"
                   />
                 </div>
               </CardContent>
@@ -359,20 +359,20 @@ export default function CreateAgent() {
 
             {/* Voice Configuration */}
             <Card className="bg-black/40 border-white/10 backdrop-blur-xl">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Volume2 className="w-5 h-5" />
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="text-white flex items-center gap-2 mobile-text">
+                  <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
                   Voice Configuration
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 sm:space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-gray-300">Voice Selection</Label>
+                  <Label className="text-gray-300 mobile-text">Voice Selection</Label>
                   <Select
                     value={formData.voiceId}
                     onValueChange={(value) => setFormData((prev) => ({ ...prev, voiceId: value }))}
                   >
-                    <SelectTrigger className="bg-black/20 border-white/20 text-white">
+                    <SelectTrigger className="bg-black/20 border-white/20 text-white touch-button mobile-text">
                       <SelectValue placeholder="Choose a voice..." />
                     </SelectTrigger>
                     <SelectContent className="bg-black/90 border-white/20">
@@ -380,7 +380,7 @@ export default function CreateAgent() {
                         <SelectItem key={voice.id} value={voice.id} className="text-white hover:bg-white/10">
                           <div className="flex items-center justify-between w-full">
                             <div>
-                              <div className="font-medium">{voice.name}</div>
+                              <div className="font-medium mobile-text">{voice.name}</div>
                               <div className="text-xs text-gray-400">
                                 {voice.accent} • {voice.gender}
                               </div>
@@ -399,98 +399,80 @@ export default function CreateAgent() {
                       size="sm"
                       onClick={handleVoicePreview}
                       disabled={isPreviewingVoice}
-                      className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent"
+                      className="mt-2 border-white/20 text-gray-300 hover:bg-white/10 bg-transparent touch-button"
                     >
-                      <Play className="w-4 h-4 mr-2" />
-                      {isPreviewingVoice ? "Playing..." : "Preview Voice"}
+                      {isPreviewingVoice ? (
+                        <>
+                          <div className="w-3 h-3 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                          Testing...
+                        </>
+                      ) : (
+                        <>
+                          <Play className="w-3 h-3 mr-2" />
+                          Preview Voice
+                        </>
+                      )}
                     </Button>
                   )}
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-gray-300">Speed ({formData.rate})</Label>
-                    <input
-                      type="range"
-                      min="-50"
-                      max="50"
-                      value={formData.rate}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, rate: Number.parseInt(e.target.value) }))}
-                      className="w-full accent-purple-500"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-gray-300">Pitch ({formData.pitch})</Label>
-                    <input
-                      type="range"
-                      min="-50"
-                      max="50"
-                      value={formData.pitch}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, pitch: Number.parseInt(e.target.value) }))}
-                      className="w-full accent-purple-500"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-gray-300">Variation ({formData.variation})</Label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="5"
-                      value={formData.variation}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, variation: Number.parseInt(e.target.value) }))}
-                      className="w-full accent-purple-500"
-                    />
-                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Preview Panel */}
-          <div className="space-y-6">
-            <Card className="bg-black/40 border-white/10 backdrop-blur-xl sticky top-6">
-              <CardHeader>
-                <CardTitle className="text-white">Live Preview</CardTitle>
+          {/* Sidebar */}
+          <div className="space-y-4 sm:space-y-6">
+            {/* Voice Options */}
+            <Card className="bg-black/40 border-white/10 backdrop-blur-xl">
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="text-white mobile-text">Available Voices</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="bg-black/20 rounded-lg p-4 border border-white/10">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                      <Bot className="w-4 h-4 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-white font-medium">{formData.name || "Your Agent"}</div>
-                      <div className="text-xs text-gray-400">
-                        {formData.voiceId
-                          ? voiceOptions.find((v) => v.id === formData.voiceId)?.name
-                          : "No voice selected"}
+              <CardContent>
+                <div className="space-y-2">
+                  {voiceOptions.map((voice) => (
+                    <div
+                      key={voice.id}
+                      className={`p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
+                        formData.voiceId === voice.id
+                          ? "border-purple-500 bg-purple-500/10"
+                          : "border-white/10 hover:bg-white/5"
+                      }`}
+                      onClick={() => setFormData((prev) => ({ ...prev, voiceId: voice.id }))}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-medium text-white mobile-text">{voice.name}</div>
+                          <div className="text-xs text-gray-400">
+                            {voice.accent} • {voice.gender}
+                          </div>
+                        </div>
+                        <Badge variant="secondary" className="bg-purple-500/20 text-purple-300">
+                          {voice.style}
+                        </Badge>
                       </div>
                     </div>
-                  </div>
-                  <div className="bg-white/5 rounded-lg p-3 border-l-4 border-purple-500">
-                    <p className="text-gray-300 text-sm">
-                      {formData.firstMessage || "Your first message will appear here..."}
-                    </p>
-                  </div>
+                  ))}
                 </div>
+              </CardContent>
+            </Card>
 
-                <div className="space-y-2">
-                  <div className="text-sm text-gray-400">Configuration Summary:</div>
-                  <div className="space-y-1 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Speed:</span>
-                      <span className="text-gray-300">{formData.rate > 0 ? `+${formData.rate}` : formData.rate}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Pitch:</span>
-                      <span className="text-gray-300">
-                        {formData.pitch > 0 ? `+${formData.pitch}` : formData.pitch}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Variation:</span>
-                      <span className="text-gray-300">{formData.variation}/5</span>
-                    </div>
+            {/* Tips */}
+            <Card className="bg-black/40 border-white/10 backdrop-blur-xl">
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="text-white mobile-text">Tips</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-sm text-gray-300">
+                  <div className="flex items-start gap-2">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p>Use clear, specific prompts to define your agent's personality</p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p>Test your voice selection before saving</p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p>Keep the first message friendly and engaging</p>
                   </div>
                 </div>
               </CardContent>
