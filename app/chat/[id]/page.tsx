@@ -225,10 +225,10 @@ export default function ChatPage() {
 
   if (!agent) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center mobile-container">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Agent not found</h1>
-          <Link href="/dashboard" className="text-purple-400 hover:text-purple-300">
+          <h1 className="mobile-heading font-bold text-white mb-4">Agent not found</h1>
+          <Link href="/dashboard" className="text-purple-400 hover:text-purple-300 mobile-text">
             Back to Dashboard
           </Link>
         </div>
@@ -237,23 +237,23 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
       {/* Simple Navigation */}
       <nav className="border-b border-white/10 bg-black/20 backdrop-blur-xl sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
+        <div className="mobile-container mx-auto py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Image
                 src="/elite-ai-logo.png"
                 alt="Elite AI"
                 width={32}
                 height={24}
-                className="w-8 h-6 object-contain"
+                className="w-6 h-5 sm:w-8 sm:h-6 object-contain"
               />
-              <span className="text-xl font-bold text-white">Elite AI</span>
+              <span className="text-lg sm:text-xl font-bold text-white">Elite AI</span>
             </div>
-            <div className="flex gap-3">
-              <Link href="/dashboard" className="text-gray-300 hover:text-white transition-colors">
+            <div className="flex gap-2 sm:gap-3">
+              <Link href="/dashboard" className="text-gray-300 hover:text-white transition-colors mobile-text">
                 Dashboard
               </Link>
             </div>
@@ -261,57 +261,57 @@ export default function ChatPage() {
         </div>
       </nav>
 
-      <div className="container mx-auto px-6 py-8">
+      <div className="mobile-container mx-auto py-4 sm:py-6 lg:py-8 flex-1 flex flex-col">
         {/* Chat Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href="/dashboard" className="text-gray-300 hover:text-white transition-colors">
+        <div className="mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <Link href="/dashboard" className="text-gray-300 hover:text-white transition-colors mobile-text">
                 ← Back
               </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-white">{agent.name}</h1>
-                <p className="text-gray-300">{agent.description}</p>
+              <div className="flex-1">
+                <h1 className="mobile-heading font-bold text-white">{agent.name}</h1>
+                <p className="text-gray-300 mobile-text">{agent.description}</p>
               </div>
             </div>
-            <div className="text-sm text-gray-400">
+            <div className="text-xs sm:text-sm text-gray-400">
               {agent.category}
             </div>
           </div>
         </div>
 
         {/* Chat Container */}
-        <div className="bg-black/40 border border-white/10 backdrop-blur-xl rounded-lg h-[600px] flex flex-col">
+        <div className="bg-black/40 border border-white/10 backdrop-blur-xl rounded-lg flex-1 flex flex-col min-h-0">
           {/* Messages */}
           <div
             ref={messagesContainerRef}
-            className="flex-1 overflow-y-auto p-6 space-y-4"
+            className="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-6 space-y-3 sm:space-y-4"
           >
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex gap-3 ${
+                className={`flex gap-2 sm:gap-3 ${
                   message.isUser ? "justify-end" : "justify-start"
                 }`}
               >
                 {!message.isUser && (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
-                    🤖
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs sm:text-sm">🤖</span>
                   </div>
                 )}
                 <div
-                  className={`max-w-[80%] rounded-lg p-3 ${
+                  className={`max-w-[85%] sm:max-w-[80%] rounded-lg p-2 sm:p-3 ${
                     message.isUser
                       ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white"
                       : "bg-white/10 text-gray-100"
                   }`}
                 >
-                  <p className="text-sm break-words">{message.text}</p>
+                  <p className="text-xs sm:text-sm break-words leading-relaxed">{message.text}</p>
                   {message.audioUrl && !message.isUser && (
                     <div className="mt-2">
                       <button
                         onClick={() => handlePlayAudio(message.audioUrl)}
-                        className="text-xs bg-white/20 hover:bg-white/30 px-2 py-1 rounded transition-colors"
+                        className="text-xs bg-white/20 hover:bg-white/30 px-2 py-1 rounded transition-colors touch-button"
                       >
                         🔊 Play
                       </button>
@@ -319,39 +319,40 @@ export default function ChatPage() {
                   )}
                 </div>
                 {message.isUser && (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center flex-shrink-0">
-                    👤
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs sm:text-sm">👤</span>
                   </div>
                 )}
               </div>
             ))}
             {isGenerating && (
-              <div className="flex gap-3 justify-start">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
-                  🤖
+              <div className="flex gap-2 sm:gap-3 justify-start">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xs sm:text-sm">🤖</span>
                 </div>
-                <div className="bg-white/10 text-gray-100 rounded-lg p-3">
-                  <p className="text-sm">Thinking...</p>
+                <div className="bg-white/10 text-gray-100 rounded-lg p-2 sm:p-3">
+                  <p className="text-xs sm:text-sm">Thinking...</p>
                 </div>
               </div>
             )}
           </div>
 
           {/* Input */}
-          <div className="border-t border-white/10 p-4">
-            <div className="flex gap-2">
+          <div className="border-t border-white/10 p-3 sm:p-4">
+            <div className="flex gap-2 sm:gap-3">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className="flex-1 bg-black/20 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-gray-400 resize-none"
+                className="flex-1 bg-black/20 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-gray-400 resize-none mobile-text touch-button"
                 rows={1}
+                style={{ minHeight: '44px' }}
               />
               <button
                 onClick={handleSendMessage}
                 disabled={isGenerating || !input.trim()}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-3 sm:px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors touch-button mobile-text"
               >
                 {isGenerating ? "..." : "Send"}
               </button>
